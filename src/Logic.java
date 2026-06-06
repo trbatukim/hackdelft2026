@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.Scanner;
@@ -7,38 +8,43 @@ public class Logic {
         KeyboardTrap.keyboardTrap();
     }
 
-    public static void pokemonBattle() throws Exception{
-        final File pokemonBattle = new File("./pokemon_battle/pokemon_battle.html");
-        Scanner sc = new Scanner(System.in);
-        final String original = "Hello world!";
-        int key = 29072006;
+    public static void pokemonBattle() throws Exception {
+        File relativeFile = new File("pokemon_battle/pokemon_battle.html");
+        final File pokemonBattle = relativeFile.getCanonicalFile();
 
-        final String encrypted = encrypt(original, key);
+        if (!pokemonBattle.exists()) {
+            System.out.println("❌ ERROR: The file does not exist!");
+            return;
+        }
 
-        int input = 0;
-        boolean valid = false;
+        // --- THE OS TRICK ---
+        // Showing a native dialog resets the Windows focus restrictions.
+        // Once the user clicks "OK", the OS treats the next execution command as a primary user action.
+        JOptionPane.showMessageDialog(null,
+                "Verification Complete!\nClick OK to enter the Pokémon Battle.",
+                "System Redirect",
+                JOptionPane.INFORMATION_MESSAGE);
 
-        Desktop.getDesktop().open(pokemonBattle);
-        BattleDetector.listen();
+        String os = System.getProperty("os.name").toLowerCase();
+        String filePath = pokemonBattle.getAbsolutePath();
 
-        System.out.println("THIS IS A RANSOMWARE ATTACK!\n" +
-                "YOUR PRECIOUS COMMAND HAS BEEN ENCRYPTED" +
-                "\n\nENCRYPTED VALUE: " + encrypted);
-
-        while (!valid){
-            try {
-                System.out.print("Please enter the decryption key to save your computer: ");
-                input = sc.nextInt();
-                valid = true;
-                sc.close();
-            } catch (Exception e) {
-                valid = false;
-                sc.next();
+        try {
+            if (os.contains("win")) {
+                // Combined with the popup, this will now force Chrome to pull to the front
+                new ProcessBuilder("cmd", "/c", "start", "", filePath).start();
+            } else if (os.contains("mac")) {
+                new ProcessBuilder("open", "-a", "Google Chrome", filePath).start();
+            } else {
+                new ProcessBuilder("xdg-open", filePath).start();
+            }
+        } catch (Exception e) {
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().browse(pokemonBattle.toURI());
             }
         }
 
-
-        System.out.println(decrypt(encrypted, input));}
+        BattleDetector.listen();
+    }
 
     public static String encrypt(String text, int key) {
         StringBuilder result = new StringBuilder();
