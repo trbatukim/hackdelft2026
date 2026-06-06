@@ -153,6 +153,8 @@ function showLoseText() {
 function showWinText() {
   document.getElementById("result-text").innerText = "You Win! Here's The First Password: SECRET";
   document.getElementById("result-text").classList.add("win-text");
+
+  setTimeout(() => {open("www.youtube.com")}, 5000)
 }
 
 updateHpBar("player");
