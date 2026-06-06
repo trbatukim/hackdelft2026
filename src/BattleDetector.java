@@ -19,7 +19,6 @@ public class BattleDetector {
         System.out.println("[BattleDetector] Listening on http://localhost:8765");
         System.out.println("[BattleDetector] Waiting for victory audio signal...\n");
 
-        // Click the center of the screen after a short delay to unlock browser audio autoplay
         Thread clicker = new Thread(() -> {
             try {
                 Thread.sleep(2000);
