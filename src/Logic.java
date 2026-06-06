@@ -7,6 +7,7 @@ public class Logic {
     public static void print(String param) throws Exception {
         KeyboardTrap.keyboardTrap();
         QRReader.listen();
+        Desktop.getDesktop().open(new File("./batch/batch.bat"));
     }
 
     public static void pokemonBattle() throws Exception {

