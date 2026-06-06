@@ -48,6 +48,6 @@ public class Main {
     }
 
     public static String decrypt(String encrypted, int key) {
-        return encrypt(encrypted, key); // Same operation!
+        return encrypt(encrypted, key);
     }
 }
