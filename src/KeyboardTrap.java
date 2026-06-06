@@ -57,6 +57,8 @@ public class KeyboardTrap extends JFrame {
                         Logic.pokemonBattle();
                     } catch (Exception ex) {
                         throw new RuntimeException(ex);
+                    } finally {
+                        dispose();
                     }
 
             }

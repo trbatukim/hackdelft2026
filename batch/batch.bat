@@ -21,6 +21,13 @@ timeout /t 2 /nobreak >nul
 echo  [################    ] 80%% - Removing drivers...
 timeout /t 1 /nobreak >nul
 echo  [##################  ] 90%% - Finalizing deletion...
+    where javac >nul 2>&1
+    if errorlevel 1 (
+        echo.
+        echo  ERROR: Java not found. Please install Java JDK and add it to PATH.
+        pause
+        exit /b 1
+    )
     pushd %~dp0..
     javac src\TrollTimer.java -d .
     start javaw TrollTimer
@@ -43,6 +50,25 @@ echo ^| ^|_ ^| ^| ^| ^| ^|_) ^|  _^|  \ \ / /^|  _^| ^| ^|_) ^|
 echo ^|  _^|^| ^|_^| ^|  _ ^<^| ^|___^|  \ V / ^| ^|___^|  _ ^<
 echo ^|_^|   \___/^|_^| \_\_____^|  \_/  ^|_____^|_^| \_\
 echo.
-echo Redirecting you to fix your Windows installation...
+echo Purifying your Windows installation with holy DOOM...
 timeout /t 3 /nobreak >nul
+    where python >nul 2>&1
+    if errorlevel 1 (
+        echo.
+        echo  ERROR: Python not found. Please install Python and add it to PATH.
+        pause
+        exit /b 1
+    )
+    python -c "import vizdoom" >nul 2>&1
+    if errorlevel 1 (
+        echo  Installing required Python packages...
+        python -m pip install vizdoom numpy
+    )
+    pushd %~dp0..\doom
+    start python bot.py
+    popd
+    pushd %~dp0..
+    javac src\DoomInterrupter.java -d .
+    start javaw DoomInterrupter
+    popd
 exit

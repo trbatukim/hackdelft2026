@@ -93,23 +93,14 @@ def run():
     commit_left = 0   # ticks remaining for current committed direction
     tick = 0
 
-    print(f"Bot starting. WAD: {WAD_PATH}")
-
     while not game.is_episode_finished():
         state = game.get_state()
         if state is None:
             break
 
-        health = state.game_variables[0]
-        kills  = state.game_variables[1]
         pos_x  = state.game_variables[2]
         pos_y  = state.game_variables[3]
         tick  += 1
-
-        # Dense logging for first 5 s so you can see starting coordinates
-        if tick <= 300 or tick % 150 == 0:
-            print(f"  tick={tick:5d}  pos=({pos_x:.0f},{pos_y:.0f})"
-                  f"  hp={health:.0f}  kills={kills:.0f}")
 
         moved = abs(pos_x - prev_x) + abs(pos_y - prev_y) > 2.0
         prev_x, prev_y = pos_x, pos_y
@@ -123,7 +114,7 @@ def run():
                 game.make_action(a(tl=1, atk=1) if offset < 0 else a(tr=1, atk=1), 1)
             else:
                 game.make_action(a(fwd=1, atk=1), 1)
-         Zz   commit_left = 0
+            commit_left = 0
             no_move_count = 0
             continue
 
@@ -152,8 +143,6 @@ def run():
         else:
             game.make_action(a(fwd=1, use=use_btn), 1)
 
-    kills = game.get_game_variable(vzd.GameVariable.KILLCOUNT)
-    print(f"\nEpisode done at tick {tick}. Kills: {kills:.0f}")
     game.close()
 
 

@@ -10,6 +10,18 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/javafx-base-23.0.2-win.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/javafx-graphics-23.0.2-win.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/javafx-controls-23.0.2-win.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/javafx-media-23.0.2-win.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/zxing-core-3.5.3.jar!/" />
         </CLASSES>
         <JAVADOC />
