@@ -1,7 +1,10 @@
 # Compiled Java
 *.class
-*.jar
 out/
+
+# JARs except vendored dependencies
+*.jar
+!lib/*.jar
 
 # IntelliJ IDEA
 .idea/
