@@ -9,11 +9,9 @@ import java.util.Set;
 
 public class KeyboardTrap extends JFrame {
 
-    // The escalating sequence of keys they must hold down
     private final List<Integer> keySequence = new ArrayList<>();
     private final List<String> keyNames = new ArrayList<>();
 
-    // Tracks which keys are currently being held down
     private final Set<Integer> currentlyPressed = new HashSet<>();
 
     private JLabel instructionLabel;
@@ -24,7 +22,7 @@ public class KeyboardTrap extends JFrame {
         keySequence.add(KeyEvent.VK_CONTROL);   keyNames.add("CTRL");
         keySequence.add(KeyEvent.VK_ALT);       keyNames.add("ALT");
         keySequence.add(KeyEvent.VK_SHIFT);     keyNames.add("SHIFT");
-        keySequence.add(KeyEvent.VK_SPACE);     keyNames.add("SPACE");
+        keySequence.add(KeyEvent.VK_P);         keyNames.add("P");
         keySequence.add(KeyEvent.VK_Z);         keyNames.add("Z");
         keySequence.add(KeyEvent.VK_X);         keyNames.add("X");
 
@@ -99,7 +97,7 @@ public class KeyboardTrap extends JFrame {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void keyboardTrap() {
         SwingUtilities.invokeLater(() -> {
             KeyboardTrap frame = new KeyboardTrap();
             frame.setVisible(true);
