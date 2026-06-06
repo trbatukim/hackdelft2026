@@ -150,11 +150,35 @@ function showLoseText() {
   document.getElementById("play-again").removeAttribute("hidden");
 }
 
+const victoryAudio = new Audio("sfx/victory.mp3");
+victoryAudio.preload = "auto";
+
+// Browsers block audio from setInterval/setTimeout. A click unlocks it.
+document.addEventListener("click", function unlockAudio() {
+  victoryAudio.muted = true;
+  victoryAudio.play().then(() => {
+    victoryAudio.pause();
+    victoryAudio.currentTime = 0;
+    victoryAudio.muted = false;
+  }).catch(() => {});
+}, { once: true });
+
+function playVictorySound() {
+  victoryAudio.currentTime = 0;
+  victoryAudio.play().catch(e => console.error("Victory sound failed:", e));
+}
+
+function notifyJava(result) {
+  fetch(`http://localhost:8765/battle-end?result=${result}`, { mode: "no-cors" })
+    .catch(() => {}); // silent if Java server isn't running
+}
+
 function showWinText() {
-  document.getElementById("result-text").innerText = "You Win! Here's The First Digit Of The Key: SECRET";
+  document.getElementById("result-text").innerText = "You Win! Congrats!";
   document.getElementById("result-text").classList.add("win-text");
 
-  setTimeout(() => {open("www.youtube.com")}, 5000)
+  playVictorySound();
+  notifyJava("win");
 }
 
 updateHpBar("player");

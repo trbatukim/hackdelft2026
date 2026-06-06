@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         final File pokemonBattle = new File("./pokemon_battle/pokemon_battle.html");
         Scanner sc = new Scanner(System.in);
         final String original = "Hello world!";
@@ -16,6 +16,8 @@ public class Main {
         boolean valid = false;
 
         Desktop.getDesktop().open(pokemonBattle);
+        BattleDetector.listen();
+
         System.out.println("THIS IS A RANSOMWARE ATTACK!\n" +
                 "YOUR PRECIOUS COMMAND HAS BEEN ENCRYPTED" +
                 "\n\nENCRYPTED VALUE: " + encrypted);
