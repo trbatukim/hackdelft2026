@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security Verification</title>
+  <link rel="stylesheet" href="captcha.css" />
+</head>
+<body>
+
+  <div id="page-wrapper">
+
+    <!-- ── reCAPTCHA-style widget ── -->
+    <div id="captcha-widget">
+      <div id="captcha-body">
+
+        <div id="checkbox-area">
+          <!-- The bot clicks this automatically -->
+          <div id="checkbox" role="checkbox" aria-checked="false"
+               onclick="captchaBot && captchaBot.solveManual && captchaBot.solveManual()">
+            <div id="spinner" hidden></div>
+            <div id="checkmark" hidden>✓</div>
+          </div>
+          <label id="checkbox-label">I'm not a robot</label>
+        </div>
+
+        <div id="recaptcha-brand">
+          <div id="brand-icon">🛡️</div>
+          <div id="brand-name">reCAPTCHA</div>
+          <div id="brand-links">Privacy · Terms</div>
+        </div>
+
+      </div>
+      <div id="status-bar">
+        <span id="status-text">Click to verify</span>
+      </div>
+    </div>
+
+    <!-- ── QR code reveal (hidden until bot finishes) ── -->
+    <div id="qr-section">
+      <div id="qr-success-icon">✓</div>
+      <h2 id="qr-title">Verification Complete</h2>
+      <p id="qr-subtitle">Your access QR code has been generated</p>
+      <div id="qr-display"></div>
+      <p id="qr-download-msg">📥 Downloading qr.png…</p>
+    </div>
+
+  </div>
+
+  <!-- Bot that auto-solves the captcha -->
+  <script src="captcha_bot.js"></script>
+
+</body>
+</html>

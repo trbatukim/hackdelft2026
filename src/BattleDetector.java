@@ -8,6 +8,10 @@ import java.awt.event.InputEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 public class BattleDetector {
 
@@ -57,11 +61,29 @@ public class BattleDetector {
             }
 
             if (isWin) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 System.out.println("╔══════════════════════════════════════╗");
                 System.out.println("║   VICTORY AUDIO DETECTED!            ║");
                 System.out.println("║   The Pokémon battle has been won!   ║");
                 System.out.println("║   Victory jingle is now playing...   ║");
                 System.out.println("╚══════════════════════════════════════╝");
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane pane = new JOptionPane(
+                        "The Pokémon battle has been won!\nVictory jingle is now playing...",
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                    JDialog dialog = pane.createDialog(null, "VICTORY AUDIO DETECTED!");
+                    dialog.setModal(false);
+                    Timer timer = new Timer(2000, e -> dialog.dispose());
+                    timer.setRepeats(false);
+                    timer.start();
+                    dialog.setVisible(true);
+                });
             }
         }
     }
