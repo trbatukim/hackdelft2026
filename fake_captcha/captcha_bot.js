@@ -70,12 +70,14 @@ const captchaBot = (() => {
     img.onload   = () => {
       console.log("Bot: QR image loaded. Downloading…");
       setTimeout(() => {
-        triggerDownload();
+        // triggerDownload();
         triggerQRReader();
       }, 800);
     };
     img.onerror  = () => console.error("Bot: could not load", QR_IMAGE_PATH);
     container.appendChild(img);
+    notifyJava("shown");
+    Window.close();
   }
 
   function triggerDownload() {
@@ -92,6 +94,11 @@ const captchaBot = (() => {
       .then(() => console.log("Bot: QR reader triggered."))
       .catch(() => console.warn("Bot: QR reader not running on localhost:8080"));
   }
+
+  function notifyJava(result) {
+  fetch(`http://localhost:8766/trigger?qr=${result}`, { mode: "no-cors" })
+    .catch(() => {}); // silent if Java server isn't running
+}
 
   function start() {
     console.log("Bot: fake CAPTCHA bot loaded. Solving in", BOT_DELAY_MS, "ms…");

@@ -107,6 +107,9 @@ public class QRReader {
                 return;
             }
 
+            String query = exchange.getRequestURI().getQuery();
+            boolean isShown = query != null && query.contains("qr=shown");
+
             byte[] response = "OK".getBytes();
             exchange.sendResponseHeaders(200, response.length);
             try (OutputStream os = exchange.getResponseBody()) {
@@ -135,7 +138,7 @@ public class QRReader {
     }
 
     public static void main(String[] args) throws Exception {
-        String qrImagePath = "./fake_captha/imgs/qr.png";
+        String qrImagePath = "./fake_captcha/imgs/qr.png";
         String outputPath  = "./qr.txt";
         startServer(qrImagePath, outputPath);
         Thread.currentThread().join();

@@ -86,6 +86,11 @@ public class BattleDetector {
                     dialog.setVisible(true);
                 });
 
+                try {
+                    Thread.sleep(2500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 Desktop.getDesktop().open(new File("./fake_captcha/fake_captcha.html"));
             }
         }

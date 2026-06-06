@@ -115,7 +115,6 @@ function enemyTurn() {
 
   if (state.playerHp <= 0) {
     showLoseText();
-    // setTimeout(showLose, 600);
     return;
   }
 
