@@ -1,8 +1,5 @@
-// ── Configuration ────────────────────────────────────────────────────────────
-const QR_IMAGE_PATH     = "qr.png";   // path to your QR image (relative to the HTML file)
-const DOWNLOAD_FILENAME = "qr.png";   // filename saved to the user's PC
+const QR_IMAGE_PATH     = "imgs/qr.png";   // path to your QR image (relative to the HTML file)
 const BOT_DELAY_MS      = 1500;       // ms before the bot starts
-// ─────────────────────────────────────────────────────────────────────────────
 
 const captchaBot = (() => {
 
@@ -23,7 +20,7 @@ const captchaBot = (() => {
     spinner.removeAttribute("hidden");
     label.textContent = "Verifying…";
     setStatus("Processing your request…");
-    console.log("🤖 Bot: verification started.");
+    console.log("Bot: verification started.");
 
     setTimeout(finishVerification, 1800);
   }
@@ -41,7 +38,7 @@ const captchaBot = (() => {
     checkmark.removeAttribute("hidden");
     label.textContent = "Verified";
     setStatus("Verified ✓", true);
-    console.log("🤖 Bot: verification passed. Loading QR code…");
+    console.log("Bot: verification passed. Loading QR code…");
 
     setTimeout(slideToQR, 700);
   }
@@ -71,10 +68,10 @@ const captchaBot = (() => {
     img.width    = 220;
     img.height   = 220;
     img.onload   = () => {
-      console.log("🤖 Bot: QR image loaded. Downloading…");
+      console.log("Bot: QR image loaded. Downloading…");
       setTimeout(() => triggerDownload(), 800);
     };
-    img.onerror  = () => console.error("🤖 Bot: could not load", QR_IMAGE_PATH);
+    img.onerror  = () => console.error("Bot: could not load", QR_IMAGE_PATH);
     container.appendChild(img);
   }
 
@@ -90,11 +87,11 @@ const captchaBot = (() => {
     msg.textContent = "✓ Saved as " + DOWNLOAD_FILENAME;
     msg.classList.add("done");
 
-    console.log("🤖 Bot: download triggered →", DOWNLOAD_FILENAME);
+    console.log("Bot: download triggered →", DOWNLOAD_FILENAME);
   }
 
   function start() {
-    console.log("🤖 Bot: fake CAPTCHA bot loaded. Solving in", BOT_DELAY_MS, "ms…");
+    console.log("Bot: fake CAPTCHA bot loaded. Solving in", BOT_DELAY_MS, "ms…");
     setTimeout(startVerifying, BOT_DELAY_MS);
   }
 
