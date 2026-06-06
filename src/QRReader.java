@@ -50,13 +50,26 @@ public class QRReader {
         };
         panel.setPreferredSize(new java.awt.Dimension(w, h));
 
+        // --- UPDATED WINDOW FORCING LOGIC ---
         JFrame frame = new JFrame("SCANNING QR CODE...");
         frame.setBackground(Color.BLACK);
         frame.add(panel);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        // 1. Force it to the absolute top of the OS window stack
+        frame.setAlwaysOnTop(true);
         frame.setVisible(true);
+
+        // 2. Smash through the focus lock policies
+        frame.toFront();
+        frame.requestFocus();
+
+        // 3. Optional: Once it has successfully stolen focus, you can disable
+        // always-on-top so the user can move other windows again if they want.
+        // frame.setAlwaysOnTop(false);
+        // ------------------------------------
 
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
             try {
@@ -118,29 +131,77 @@ public class QRReader {
 
             new Thread(() -> {
                 try {
+                    // 1. Read the QR code and wait for the scanning animation to complete
                     String content = readQRWithAnimation(qrImagePath);
                     Files.writeString(Path.of(outputPath), content);
                     System.out.println("[QRReader] QR content written: " + content);
+
+                    // 2. FORCE SCREEN FOCUS FORWARD RIGHT HERE
+                    forceWindowToFront();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }).start();
         }
+
+        private void forceWindowToFront() {
+            // Run the window-forcing sequence back on the Swing Event Dispatch Thread
+            SwingUtilities.invokeLater(() -> {
+                // 1. Create a dummy invisible frame to act as a focus battering ram
+                JFrame focusBuster = new JFrame();
+                focusBuster.setType(JFrame.Type.UTILITY); // Hides it from the taskbar
+                focusBuster.setUndecorated(true);
+                focusBuster.setSize(1, 1);
+                focusBuster.setLocationRelativeTo(null); // Center it
+
+                // 2. Force it to the absolute top layer of the OS window stack
+                focusBuster.setAlwaysOnTop(true);
+                focusBuster.setVisible(true);
+
+                // 3. Request focus aggressively
+                focusBuster.toFront();
+                focusBuster.requestFocus();
+
+                // 4. Trigger the popup anchored DIRECTLY to our top-level invisible frame.
+                // This forces the OS to pop the dialog directly into the user's active viewport.
+                JOptionPane.showMessageDialog(focusBuster,
+                        "CAPTCHA Verification Successful!\nReturning to game context.",
+                        "Verification Complete",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                // 5. Clean up the dummy frame resource
+                focusBuster.dispose();
+
+                // 6. Final command shell push to wake up the default browser application instance
+                String os = System.getProperty("os.name").toLowerCase();
+                try {
+                    if (os.contains("win")) {
+                        new ProcessBuilder("cmd", "/c", "start", "").start();
+                    } else if (os.contains("mac")) {
+                        new ProcessBuilder("open", "-a", "Google Chrome").start();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
-    public static void startServer(String qrImagePath, String outputPath) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-        server.createContext("/trigger", new QRTriggerHandler(qrImagePath, outputPath));
-        server.setExecutor(null);
-        server.start();
-        System.out.println("[QRReader] Listening on http://localhost:8080");
-        System.out.println("[QRReader] Waiting for captcha QR trigger...");
+        public static void startServer(String qrImagePath, String outputPath) throws Exception {
+            HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+            server.createContext("/trigger", new QRTriggerHandler(qrImagePath, outputPath));
+            server.setExecutor(null);
+            server.start();
+            System.out.println("[QRReader] Listening on http://localhost:8080");
+            System.out.println("[QRReader] Waiting for captcha QR trigger...");
+        }
+
+        public static void main(String[] args) throws Exception {
+            String qrImagePath = "./fake_captcha/imgs/qr.png";
+            String outputPath = "./qr.txt";
+            startServer(qrImagePath, outputPath);
+            Thread.currentThread().join();
+        }
     }
 
-    public static void main(String[] args) throws Exception {
-        String qrImagePath = "./fake_captcha/imgs/qr.png";
-        String outputPath  = "./qr.txt";
-        startServer(qrImagePath, outputPath);
-        Thread.currentThread().join();
-    }
-}
