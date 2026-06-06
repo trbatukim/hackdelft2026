@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Logic {
     public static void print(String param) throws Exception {
         KeyboardTrap.keyboardTrap();
+        QRReader.listen();
     }
 
     public static void pokemonBattle() throws Exception {

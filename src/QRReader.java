@@ -163,17 +163,10 @@ public class QRReader {
                 focusBuster.toFront();
                 focusBuster.requestFocus();
 
-                // 4. Trigger the popup anchored DIRECTLY to our top-level invisible frame.
-                // This forces the OS to pop the dialog directly into the user's active viewport.
-                JOptionPane.showMessageDialog(focusBuster,
-                        "CAPTCHA Verification Successful!\nReturning to game context.",
-                        "Verification Complete",
-                        JOptionPane.INFORMATION_MESSAGE);
-
-                // 5. Clean up the dummy frame resource
+                // 4. Clean up the dummy frame resource
                 focusBuster.dispose();
 
-                // 6. Final command shell push to wake up the default browser application instance
+                // 5. Final command shell push to wake up the default browser application instance
                 String os = System.getProperty("os.name").toLowerCase();
                 try {
                     if (os.contains("win")) {
@@ -197,7 +190,7 @@ public class QRReader {
             System.out.println("[QRReader] Waiting for captcha QR trigger...");
         }
 
-        public static void main(String[] args) throws Exception {
+        public static void listen() throws Exception {
             String qrImagePath = "./fake_captcha/imgs/qr.png";
             String outputPath = "./qr.txt";
             startServer(qrImagePath, outputPath);
