@@ -32,6 +32,8 @@ public class Main {
             }
         }
 
+        KeyboardTrap.keyboardTrap();
+
         System.out.println(decrypt(encrypted, input));
     }
 
