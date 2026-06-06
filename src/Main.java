@@ -1,8 +1,11 @@
+import java.awt.*;
+import java.io.*;
 import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        File pokemonBattle = new File("./pokemon_battle/pokemon_battle.html");
         Scanner sc = new Scanner(System.in);
         String original = "Hello world!";
         int key = 42;
@@ -11,6 +14,8 @@ public class Main {
 
         int input = 0;
         boolean valid = false;
+
+        Desktop.getDesktop().open(pokemonBattle);
 
         while (!valid){
             try {

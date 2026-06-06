@@ -92,8 +92,15 @@ function playerAttack(idx) {
     log(`PIKACHU took ${recoilDmg} recoil damage!`);
   }
 
-  if (state.playerHp <= 0) { setTimeout(showLose, 600); return; }
-  if (state.enemyHp <= 0)  { setTimeout(showWin,  600); return; }
+  if (state.playerHp <= 0) { 
+    setTimeout(showLose, 600); 
+    return; 
+  }
+  if (state.enemyHp <= 0)  { 
+    // setTimeout(showWin,  600); 
+    showWinText();
+    return; 
+  }
 
   setTimeout(enemyTurn, 900);
 }
@@ -103,25 +110,17 @@ function enemyTurn() {
   const dmg = randInt(em.minDmg, em.maxDmg);
   state.playerHp -= dmg;
   shakeSprite("player-sprite");
-  log(`GENGAR used ${em.name}! Dealt ${dmg} damage.`, "enemy-log");
+  log(`PALOSSAND used ${em.name}! Dealt ${dmg} damage.`, "enemy-log");
   updateHpBar("player");
 
   if (state.playerHp <= 0) {
-    setTimeout(showLose, 600);
+    showLoseText();
+    // setTimeout(showLose, 600);
     return;
   }
 
   state.busy = false;
   setButtonsDisabled(false);
-}
-
-function showWin() {
-  document.getElementById("password-reveal").textContent = WIN_PASSWORD;
-  document.getElementById("win-overlay").classList.add("show");
-}
-
-function showLose() {
-  document.getElementById("lose-overlay").classList.add("show");
 }
 
 function resetGame() {
@@ -132,14 +131,28 @@ function resetGame() {
   updateHpBar("player");
   updateHpBar("enemy");
 
-  document.getElementById("log").innerHTML = '<p class="highlight">A wild GENGAR appeared! Choose your move!</p>';
-  document.getElementById("win-overlay").classList.remove("show");
-  document.getElementById("lose-overlay").classList.remove("show");
-
+  document.getElementById("log").innerHTML = '<p class="highlight">A wild PALOSSAND appeared! Choose your move!</p>';
   document.getElementById("enemy-sprite").style.transform = "";
   document.getElementById("player-sprite").style.transform = "";
 
+  const resultEl = document.getElementById("result-text");
+  resultEl.innerText = "";
+  resultEl.className = "";
+  document.getElementById("play-again").setAttribute("hidden", "hidden");
+
   setButtonsDisabled(false);
+}
+
+function showLoseText() {
+  const el = document.getElementById("result-text");
+  el.innerText = "You Lost! Try Again...";
+  el.classList.add("lose-text");
+  document.getElementById("play-again").removeAttribute("hidden");
+}
+
+function showWinText() {
+  document.getElementById("result-text").innerText = "You Win! Here's The First Password: SECRET";
+  document.getElementById("result-text").classList.add("win-text");
 }
 
 updateHpBar("player");

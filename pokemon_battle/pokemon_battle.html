@@ -33,44 +33,26 @@
   <div id="log"><p class="highlight">A wild PALOSSAND appeared! Choose your move!</p></div>
 
   <div id="moves">
-    <button class="move-btn" onclick="playerAttack(0)">
-      <div class="move-name">THUNDERBOLT</div>
-      <div class="move-type">Electric &bull; 90 power &bull; 100% acc</div>
+    <button class="move-btn" data-type="electric" onclick="playerAttack(0)">
+      <span class="move-name">THUNDERBOLT</span>
+      <span class="move-type-tag">ELECTRIC</span><span class="move-meta">PWR 90</span>
     </button>
-    <button class="move-btn" onclick="playerAttack(1)">
-      <div class="move-name">QUICK ATTACK</div>
-      <div class="move-type">Normal &bull; 40 power &bull; always hits</div>
+    <button class="move-btn" data-type="normal" onclick="playerAttack(1)">
+      <span class="move-name">QUICK ATTACK</span>
+      <span class="move-type-tag">NORMAL</span><span class="move-meta">PWR 40</span>
     </button>
-    <button class="move-btn" onclick="playerAttack(2)">
-      <div class="move-name">IRON TAIL</div>
-      <div class="move-type">Steel &bull; 100 power &bull; 75% acc</div>
+    <button class="move-btn" data-type="steel" onclick="playerAttack(2)">
+      <span class="move-name">IRON TAIL</span>
+      <span class="move-type-tag">STEEL</span><span class="move-meta">PWR 100  75%</span>
     </button>
-    <button class="move-btn" onclick="playerAttack(3)">
-      <div class="move-name">VOLT TACKLE</div>
-      <div class="move-type">Electric &bull; 120 power &bull; recoil 25%</div>
+    <button class="move-btn" data-type="electric" onclick="playerAttack(3)">
+      <span class="move-name">VOLT TACKLE</span>
+      <span class="move-type-tag">ELECTRIC</span><span class="move-meta">PWR 120  recoil</span>
     </button>
   </div>
 
-  <!-- Win overlay -->
-  <div id="win-overlay">
-    <div id="win-box">
-      <div class="trophy">&#127942;</div>
-      <h2>YOU WIN!</h2>
-      <p>You defeated PALOSSAND! Here is your reward:</p>
-      <div id="password-reveal">SECRET_PASSWORD</div>
-      <button id="play-again" onclick="resetGame()">Play Again</button>
-    </div>
-  </div>
-
-  <!-- Lose overlay -->
-  <div id="lose-overlay">
-    <div id="lose-box">
-      <div class="skull">&#128128;</div>
-      <h2>YOU LOSE!</h2>
-      <p>PIKACHU fainted... Try again!</p>
-      <button id="try-again" onclick="resetGame()">Try Again</button>
-    </div>
-  </div>
+  <div id="result-text"></div>
+  <button hidden="hidden" id="play-again" onclick="resetGame()">Play Again</button>
 
   <script src="pokemon_battle.js"></script>
 </body>
