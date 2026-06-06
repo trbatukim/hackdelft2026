@@ -21,3 +21,6 @@ node_modules/
 
 # Compiled class files
 *.class
+
+# Runner batch
+batch/runner.bat
