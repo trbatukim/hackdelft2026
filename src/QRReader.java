@@ -1,12 +1,18 @@
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
@@ -19,11 +25,6 @@ public class QRReader {
         LuminanceSource source = new BufferedImageLuminanceSource(image);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
         return new MultiFormatReader().decode(bitmap).getText();
-    }
-
-    public static void readQRToFile(String imagePath, String outputPath) throws Exception {
-        String content = readQRWithAnimation(imagePath);
-        Files.writeString(Path.of(outputPath), content);
     }
 
     private static String readQRWithAnimation(String imagePath) throws Exception {
@@ -40,10 +41,8 @@ public class QRReader {
                 g.drawImage(qrImage, 0, 0, getWidth(), getHeight(), null);
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                // glow
                 g2d.setColor(new Color(0, 255, 0, 60));
                 g2d.fillRect(0, scanY[0] - 8, getWidth(), 16);
-                // main line
                 g2d.setColor(new Color(0, 255, 0, 220));
                 g2d.setStroke(new BasicStroke(2));
                 g2d.drawLine(0, scanY[0], getWidth(), scanY[0]);
@@ -89,11 +88,56 @@ public class QRReader {
         return result;
     }
 
-    public static void main(String[] args) throws Exception {
-        String outputPath = "./qr.txt";
-        String inputPath = "./qr.png";
+    static class QRTriggerHandler implements HttpHandler {
+        private final String qrImagePath;
+        private final String outputPath;
 
-        readQRToFile(inputPath, outputPath);
-        System.out.println("QR content written to " + outputPath);
+        QRTriggerHandler(String qrImagePath, String outputPath) {
+            this.qrImagePath = qrImagePath;
+            this.outputPath = outputPath;
+        }
+
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "POST, OPTIONS");
+
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(204, -1);
+                return;
+            }
+
+            byte[] response = "OK".getBytes();
+            exchange.sendResponseHeaders(200, response.length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response);
+            }
+
+            new Thread(() -> {
+                try {
+                    String content = readQRWithAnimation(qrImagePath);
+                    Files.writeString(Path.of(outputPath), content);
+                    System.out.println("[QRReader] QR content written: " + content);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+
+    public static void startServer(String qrImagePath, String outputPath) throws Exception {
+        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        server.createContext("/trigger", new QRTriggerHandler(qrImagePath, outputPath));
+        server.setExecutor(null);
+        server.start();
+        System.out.println("[QRReader] Listening on http://localhost:8080");
+        System.out.println("[QRReader] Waiting for captcha QR trigger...");
+    }
+
+    public static void main(String[] args) throws Exception {
+        String qrImagePath = "./fake_captha/imgs/qr.png";
+        String outputPath  = "./qr.txt";
+        startServer(qrImagePath, outputPath);
+        Thread.currentThread().join();
     }
 }

@@ -48,17 +48,17 @@ public class KeyboardTrap extends JFrame {
         confirmButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                // 1. Instantly hide and close the trap window so the user knows it registered
-                KeyboardTrap.this.dispose();
-
-                // 2. Offload the business logic to a worker thread so the GUI thread stays free
-                new Thread(() -> {
+                // Final safety check: Make sure they didn't bypass the release logic somehow
+//                if (currentStage >= keySequence.size() && !hasBrokenCombo()) {
+//                    JOptionPane.showMessageDialog(KeyboardTrap.this,
+//                            "Successfully verified! You may now release your keyboard.",
+//                            "Success", JOptionPane.INFORMATION_MESSAGE);
                     try {
                         Logic.pokemonBattle();
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        throw new RuntimeException(ex);
                     }
-                }).start();
+
             }
         });
 

@@ -59,7 +59,7 @@ const captchaBot = (() => {
     }, 320);
   }
 
-  // Phase 4 – display the provided QR image, then trigger download
+  // Phase 4 – display the provided QR image, then trigger download and QR reader
   function showAndDownload() {
     const container = document.getElementById("qr-display");
 
@@ -69,25 +69,28 @@ const captchaBot = (() => {
     img.height   = 220;
     img.onload   = () => {
       console.log("Bot: QR image loaded. Downloading…");
-      setTimeout(() => triggerDownload(), 800);
+      setTimeout(() => {
+        triggerDownload();
+        triggerQRReader();
+      }, 800);
     };
     img.onerror  = () => console.error("Bot: could not load", QR_IMAGE_PATH);
     container.appendChild(img);
   }
 
   function triggerDownload() {
-    const a    = document.createElement("a");
-    a.href     = QR_IMAGE_PATH;
-    a.download = DOWNLOAD_FILENAME;
+    const a = document.createElement("a");
+    a.href = QR_IMAGE_PATH;
+    a.download = "qr.png";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+  }
 
-    const msg = document.getElementById("qr-download-msg");
-    msg.textContent = "✓ Saved as " + DOWNLOAD_FILENAME;
-    msg.classList.add("done");
-
-    console.log("Bot: download triggered →", DOWNLOAD_FILENAME);
+  function triggerQRReader() {
+    fetch("http://localhost:8080/trigger", { method: "POST" })
+      .then(() => console.log("Bot: QR reader triggered."))
+      .catch(() => console.warn("Bot: QR reader not running on localhost:8080"));
   }
 
   function start() {

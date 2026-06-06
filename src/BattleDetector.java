@@ -1,10 +1,10 @@
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.Dimension;
+
+import java.awt.*;
 import java.awt.event.InputEvent;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -77,13 +77,16 @@ public class BattleDetector {
                         "The Pokémon battle has been won!\nVictory jingle is now playing...",
                         JOptionPane.INFORMATION_MESSAGE
                     );
-                    JDialog dialog = pane.createDialog(null, "VICTORY AUDIO DETECTED!");
+                    JDialog dialog = pane.createDialog(null, "VICTORY AUDIO DETECTED! Redirecting to captcha...");
                     dialog.setModal(false);
+                    dialog.setAlwaysOnTop(true);
                     Timer timer = new Timer(2000, e -> dialog.dispose());
                     timer.setRepeats(false);
                     timer.start();
                     dialog.setVisible(true);
                 });
+
+                Desktop.getDesktop().open(new File("./fake_captcha/fake_captcha.html"));
             }
         }
     }

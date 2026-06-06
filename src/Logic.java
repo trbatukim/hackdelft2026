@@ -13,7 +13,7 @@ public class Logic {
         final File pokemonBattle = relativeFile.getCanonicalFile();
 
         if (!pokemonBattle.exists()) {
-            System.out.println("❌ ERROR: The file does not exist!");
+            System.out.println("ERROR: The file does not exist!");
             return;
         }
 
