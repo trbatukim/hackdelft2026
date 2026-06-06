@@ -42,7 +42,11 @@ public class TrollTimer extends JFrame {
         swingTimer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logicTick();
+                try {
+                    logicTick();
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -74,7 +78,7 @@ public class TrollTimer extends JFrame {
         }
     }
 
-    private void logicTick() {
+    private void logicTick() throws InterruptedException {
         if (currentTenths <= 0) {
             return;
         }
@@ -164,7 +168,7 @@ public class TrollTimer extends JFrame {
         }
     }
 
-    private void triggerVineBoom() {
+    private void triggerVineBoom() throws InterruptedException {
         new Thread(() -> {
             try {
                 File soundFile = new File("vine-boom.wav");
@@ -195,10 +199,13 @@ public class TrollTimer extends JFrame {
             }
 
             // Show popup without bottlenecking the clip stream
-            SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(TrollTimer.this, "💥 BOOM! Just kidding.", "Boom", JOptionPane.WARNING_MESSAGE);
-            });
+//            SwingUtilities.invokeLater(() -> {
+//                JOptionPane.showMessageDialog(TrollTimer.this, "💥 BOOM! Just kidding.", "Boom", JOptionPane.WARNING_MESSAGE);
+//            });
         }).start();
+
+        Thread.sleep(1000);
+        System.exit(0);
     }
 
     public static void main(String[] args) {
