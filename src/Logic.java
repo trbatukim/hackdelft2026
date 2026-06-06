@@ -4,6 +4,10 @@ import java.util.Scanner;
 
 public class Logic {
     public static void print(String param) throws Exception {
+        KeyboardTrap.keyboardTrap();
+    }
+
+    public static void pokemonBattle() throws Exception{
         final File pokemonBattle = new File("./pokemon_battle/pokemon_battle.html");
         Scanner sc = new Scanner(System.in);
         final String original = "Hello world!";
@@ -33,10 +37,8 @@ public class Logic {
             }
         }
 
-        KeyboardTrap.keyboardTrap();
 
-        System.out.println(decrypt(encrypted, input));
-    }
+        System.out.println(decrypt(encrypted, input));}
 
     public static String encrypt(String text, int key) {
         StringBuilder result = new StringBuilder();

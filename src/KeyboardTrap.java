@@ -49,12 +49,16 @@ public class KeyboardTrap extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 // Final safety check: Make sure they didn't bypass the release logic somehow
-                if (currentStage >= keySequence.size() && !hasBrokenCombo()) {
-                    JOptionPane.showMessageDialog(KeyboardTrap.this,
-                            "Successfully verified! You may now release your keyboard.",
-                            "Success", JOptionPane.INFORMATION_MESSAGE);
-                    System.exit(0);
-                }
+//                if (currentStage >= keySequence.size() && !hasBrokenCombo()) {
+//                    JOptionPane.showMessageDialog(KeyboardTrap.this,
+//                            "Successfully verified! You may now release your keyboard.",
+//                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                    try {
+                        Logic.pokemonBattle();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+
             }
         });
 
@@ -94,7 +98,7 @@ public class KeyboardTrap extends JFrame {
             // Hide and disable button on reset/start
             confirmButton.setVisible(false);
             confirmButton.setEnabled(false);
-            instructionLabel.setText("<html><center>Please press <font color='red'>ENTER</font> to continue.</center></html>");
+            instructionLabel.setText("<html><center>Please press <font color='red'>ENTER</font> to start.</center></html>");
         } else if (currentStage < keySequence.size()) {
             // Keep button hidden while building the combo
             confirmButton.setVisible(false);
