@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokemon Battle Simulator</title>
+  <link rel="stylesheet" href="pokemon_battle.css" />
+</head>
+<body>
+
+  <h1>Pokémon Beach Battle</h1>
+
+  <div id="arena">
+    <!-- Enemy HP -->
+    <div class="hp-box" id="enemy-hp-box">
+      <div class="name" id="enemy-name">PALOSSAND</div>
+      <div class="hp-track"><div class="hp-fill high" id="enemy-hp-fill"></div></div>
+      <div class="hp-numbers"><span id="enemy-hp-cur">120</span> / <span id="enemy-hp-max">120</span></div>
+    </div>
+
+    <!-- Sprites -->
+    <img src="imgs/pallosand.png" class="pokemon-sprite" id="enemy-sprite" />
+    <img src="imgs/pikachu.png" class="pokemon-sprite" id="player-sprite"></img>
+
+    <!-- Player HP -->
+    <div class="hp-box" id="player-hp-box">
+      <div class="name" id="player-name">PIKACHU</div>
+      <div class="hp-track"><div class="hp-fill high" id="player-hp-fill"></div></div>
+      <div class="hp-numbers"><span id="player-hp-cur">100</span> / <span id="player-hp-max">100</span></div>
+    </div>
+  </div>
+
+  <div id="log"><p class="highlight">A wild PALOSSAND appeared! Choose your move!</p></div>
+
+  <div id="moves">
+    <button class="move-btn" onclick="playerAttack(0)">
+      <div class="move-name">THUNDERBOLT</div>
+      <div class="move-type">Electric &bull; 90 power &bull; 100% acc</div>
+    </button>
+    <button class="move-btn" onclick="playerAttack(1)">
+      <div class="move-name">QUICK ATTACK</div>
+      <div class="move-type">Normal &bull; 40 power &bull; always hits</div>
+    </button>
+    <button class="move-btn" onclick="playerAttack(2)">
+      <div class="move-name">IRON TAIL</div>
+      <div class="move-type">Steel &bull; 100 power &bull; 75% acc</div>
+    </button>
+    <button class="move-btn" onclick="playerAttack(3)">
+      <div class="move-name">VOLT TACKLE</div>
+      <div class="move-type">Electric &bull; 120 power &bull; recoil 25%</div>
+    </button>
+  </div>
+
+  <!-- Win overlay -->
+  <div id="win-overlay">
+    <div id="win-box">
+      <div class="trophy">&#127942;</div>
+      <h2>YOU WIN!</h2>
+      <p>You defeated PALOSSAND! Here is your reward:</p>
+      <div id="password-reveal">SECRET_PASSWORD</div>
+      <button id="play-again" onclick="resetGame()">Play Again</button>
+    </div>
+  </div>
+
+  <!-- Lose overlay -->
+  <div id="lose-overlay">
+    <div id="lose-box">
+      <div class="skull">&#128128;</div>
+      <h2>YOU LOSE!</h2>
+      <p>PIKACHU fainted... Try again!</p>
+      <button id="try-again" onclick="resetGame()">Try Again</button>
+    </div>
+  </div>
+
+  <script src="pokemon_battle.js"></script>
+</body>
+</html>
