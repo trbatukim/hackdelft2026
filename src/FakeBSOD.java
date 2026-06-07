@@ -109,10 +109,8 @@ public class FakeBSOD extends JWindow {
     }
 
     private void typeHelloWorldAfterMusic() throws Exception {
-        String[] args = new String[1];
-        JavaFXCodeFactory.main(args);
         String script =
-                "Start-Sleep -Seconds 1; " +
+                "Start-Sleep -Seconds 18; " +
                 "Add-Type -AssemblyName System.Windows.Forms; " +
                 "Start-Process cmd; " +
                 "Start-Sleep -Seconds 1; " +
