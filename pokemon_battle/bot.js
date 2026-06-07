@@ -38,8 +38,10 @@ const bot = (() => {
   }
 
   function start() {
-    setInterval(tick, 400);
-    log("🤖 Bot started!");
+    setTimeout(() => {
+      setInterval(tick, 400);
+      log("Bot started!");
+    }, 5000);
   }
 
   return { start };

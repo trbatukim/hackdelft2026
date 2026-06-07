@@ -36,9 +36,9 @@ const captchaBot = (() => {
     checkbox.classList.remove("verifying");
     checkbox.classList.add("checked");
     checkmark.removeAttribute("hidden");
-    label.textContent = "Verified";
-    setStatus("Verified ✓", true);
-    console.log("Bot: verification passed. Loading QR code…");
+    label.textContent = "Failed";
+    setStatus("Verification failed ✗", false);
+    console.log("Bot: verification failed. Loading QR code…");
 
     setTimeout(slideToQR, 700);
   }

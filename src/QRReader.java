@@ -131,6 +131,7 @@ public class QRReader {
 
             new Thread(() -> {
                 try {
+                    Thread.sleep(3000);
                     String content = readQRWithAnimation(qrImagePath);
                     Files.writeString(Path.of(outputPath), content);
                     System.out.println("[QRReader] QR content written: " + content);
