@@ -91,8 +91,8 @@ public class FakeBSOD extends JWindow {
     private void revealDesktop() {
         try {
             playRelaxingMusic();
-            typeHelloWorldAfterMusic();
             focusDesktop();
+            typeHelloWorldAfterMusic();
         } catch (Exception ignored) {
         }
     }
@@ -112,7 +112,7 @@ public class FakeBSOD extends JWindow {
         String[] args = new String[1];
         JavaFXCodeFactory.main(args);
         String script =
-                "Start-Sleep -Seconds 18; " +
+                "Start-Sleep -Seconds 1; " +
                 "Add-Type -AssemblyName System.Windows.Forms; " +
                 "Start-Process cmd; " +
                 "Start-Sleep -Seconds 1; " +
