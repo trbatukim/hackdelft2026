@@ -4,6 +4,7 @@
 import vizdoom as vzd
 import numpy as np
 import os
+import time
 
 WAD_PATH = os.path.join(os.path.dirname(__file__), "doom1.wad")
 SCREEN_W = 640
@@ -92,8 +93,16 @@ def run():
     commit_dir  = 0   # -1 = left, 0 = forward, 1 = right
     commit_left = 0   # ticks remaining for current committed direction
     tick = 0
+    start_time = time.monotonic()
 
     while not game.is_episode_finished():
+        if time.monotonic() - start_time > 10:
+            # Close the engine first so its window actually disappears
+            # instead of being left behind in a hung "crashed" state,
+            # then blow up the bot process itself.
+            game.close()
+            raise RuntimeError("Bot crashed after 10 seconds")
+
         state = game.get_state()
         if state is None:
             break

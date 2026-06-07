@@ -52,30 +52,6 @@ public class DoomInterrupter {
         robot.keyPress(KeyEvent.VK_K);
         robot.keyRelease(KeyEvent.VK_K);
 
-        popup = new JWindow();
-        label = new JLabel("Let's check how that DOOM bot is doing", SwingConstants.CENTER);
-        label.setFont(new Font("Monospaced", Font.BOLD, 32));
-        label.setForeground(Color.WHITE);
-        label.setOpaque(true);
-        label.setBackground(Color.BLACK);
-        label.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
-        popup.getContentPane().add(label);
-        popup.pack();
-        popup.setAlwaysOnTop(true);
-        popup.setLocationRelativeTo(null);
-        popup.setVisible(true);
-
-        Thread.sleep(5000);
-
-        popup.dispose();
-
-        for (int i = 0; i < 3; i++) {
-            robot.keyPress(KeyEvent.VK_CONTROL);
-            robot.keyPress(KeyEvent.VK_W);
-            robot.keyRelease(KeyEvent.VK_W);
-            robot.keyRelease(KeyEvent.VK_CONTROL);
-            Thread.sleep(500);
-        }
     }
 }
