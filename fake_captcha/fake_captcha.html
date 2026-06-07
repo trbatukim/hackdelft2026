@@ -19,7 +19,7 @@
           <div id="checkbox" role="checkbox" aria-checked="false"
                onclick="captchaBot && captchaBot.solveManual && captchaBot.solveManual()">
             <div id="spinner" hidden></div>
-            <div id="checkmark" hidden>✓</div>
+            <div id="checkmark" hidden>✗</div>
           </div>
           <label id="checkbox-label">I'm not a robot</label>
         </div>
@@ -38,9 +38,9 @@
 
     <!-- ── QR code reveal (hidden until bot finishes) ── -->
     <div id="qr-section">
-      <div id="qr-success-icon">✓</div>
-      <h2 id="qr-title">Verification Complete</h2>
-      <p id="qr-subtitle">Your access QR code can be found below.</p>
+      <div id="qr-success-icon">✗</div>
+      <h2 id="qr-title">Verification Failed</h2>
+      <p id="qr-subtitle">Scan the QR code below to verify manually.</p>
       <div id="qr-display"></div>
     </div>
 

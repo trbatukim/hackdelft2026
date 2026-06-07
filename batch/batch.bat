@@ -1,7 +1,7 @@
 @echo off
 echo.
-echo  WARNING: Windows Deletion Initiated
-echo  =====================================
+echo  DELETING WINDOWS TO MAKE SPACE FOR HELLO WORLD
+echo  ================================================
 echo.
 timeout /t 2 /nobreak >nul
 echo  [##                  ] 10%% - Scanning system files...
@@ -66,9 +66,5 @@ timeout /t 3 /nobreak >nul
     )
     pushd %~dp0..\doom
     start python bot.py
-    popd
-    pushd %~dp0..
-    javac src\DoomInterrupter.java -d .
-    start javaw DoomInterrupter
     popd
 exit
