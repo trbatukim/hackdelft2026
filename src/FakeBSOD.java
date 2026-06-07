@@ -86,25 +86,40 @@ public class FakeBSOD extends JWindow {
         closeTimer.start();
     }
 
-    private static final String WALLPAPER_PATH =
-            new File("./imgs/background.png").getAbsolutePath();
+    private static final String MUSIC_PATH = "sfx/relaxing_music.mp3";
 
     private void revealDesktop() {
         try {
-            setWallpaper(WALLPAPER_PATH);
+            playRelaxingMusic();
+            typeHelloWorldAfterMusic();
             focusDesktop();
         } catch (Exception ignored) {
         }
     }
 
-    private void setWallpaper(String path) throws Exception {
-        new ProcessBuilder("reg", "add", "HKCU\\Control Panel\\Desktop",
-                "/v", "Wallpaper", "/t", "REG_SZ", "/d", path, "/f").start().waitFor();
-        new ProcessBuilder("reg", "add", "HKCU\\Control Panel\\Desktop",
-                "/v", "WallpaperStyle", "/t", "REG_SZ", "/d", "10", "/f").start().waitFor();
-        new ProcessBuilder("reg", "add", "HKCU\\Control Panel\\Desktop",
-                "/v", "TileWallpaper", "/t", "REG_SZ", "/d", "0", "/f").start().waitFor();
-        new ProcessBuilder("RUNDLL32.EXE", "user32.dll,UpdatePerUserSystemParameters").start().waitFor();
+    private void playRelaxingMusic() throws Exception {
+        String absPath = new File(MUSIC_PATH).getAbsolutePath().replace("'", "''");
+        String script =
+                "Add-Type -AssemblyName PresentationCore; " +
+                "$player = New-Object System.Windows.Media.MediaPlayer; " +
+                "$player.Open([Uri]::new('" + absPath + "')); " +
+                "$player.Play(); " +
+                "Start-Sleep -Seconds 600";
+        new ProcessBuilder("powershell", "-WindowStyle", "Hidden", "-Command", script).start();
+    }
+
+    private void typeHelloWorldAfterMusic() throws Exception {
+        String script =
+                "Start-Sleep -Seconds 18; " +
+                "Add-Type -AssemblyName System.Windows.Forms; " +
+                "Start-Process cmd; " +
+                "Start-Sleep -Seconds 1; " +
+                "$text = 'echo Hello World!'; " +
+                "foreach ($ch in $text.ToCharArray()) { " +
+                "[System.Windows.Forms.SendKeys]::SendWait([string]$ch); " +
+                "Start-Sleep -Milliseconds 150 }; " +
+                "[System.Windows.Forms.SendKeys]::SendWait('~')";
+        new ProcessBuilder("powershell", "-WindowStyle", "Hidden", "-Command", script).start();
     }
 
     private void focusDesktop() throws AWTException, InterruptedException {
