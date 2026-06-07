@@ -2,6 +2,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,6 +28,7 @@ public class JavaFXCodeFactory extends Application {
     private VBox consoleWindow;
     private VBox consoleLines;
     private Label statusBar;
+    private Stage stage;
 
     private int currentLineIndex = 0;
     private int currentCharIndex = 0;
@@ -34,32 +36,87 @@ public class JavaFXCodeFactory extends Application {
     // The obfuscated C script to type out live
     private final String[] cCodeLines = {
             "#include <stdio.h>",
+            "#include <stdlib.h>",
+            "#include <string.h>",
             "#include <unistd.h>",
             "",
-            "int main() {",
-            "    // Hexadecimal character matrix (ASCII backwards)",
-            "    long long p1 = 0x6f6c6c6548ULL;",
-            "    long long p2 = 0x646c726f5720ULL;",
-            "    char s[14];",
-            "    ",
-            "    // Byte-extraction via bitwise pointer masking",
-            "    for(int i = 0; i < 5; i++) {",
-            "        s[i] = (char)((p1 >> (i * 8)) & 0xFF);",
+            "/* Polymorphic deferred-dispatch payload synthesizer */",
+            "typedef struct { unsigned long key; unsigned long mask; int shift; } gene_t;",
+            "",
+            "static unsigned long fold_entropy(unsigned long seed, int rounds) {",
+            "    for (int r = 0; r < rounds; r++) {",
+            "        seed ^= (seed << 13);",
+            "        seed ^= (seed >> 7);",
+            "        seed ^= (seed << 17);",
+            "        seed = (seed * 0x9E3779B97F4A7C15UL) & 0xFFFFFFFFFFFFFFFFUL;",
             "    }",
-            "    for(int i = 0; i < 7; i++) {",
-            "        s[5 + i] = (char)((p2 >> (i * 8)) & 0xFF);",
+            "    return seed;",
+            "}",
+            "",
+            "static void lattice_decode(const gene_t *genes, int n, char *out) {",
+            "    for (int i = 0; i < n; i++) {",
+            "        unsigned long folded = fold_entropy(genes[i].key, (i % 3) + 1);",
+            "        out[i] = (char)(((folded ^ genes[i].mask) >> genes[i].shift) & 0xFF);",
             "    }",
-            "    s[12] = '!';",
-            "    s[13] = '\\0';",
-            "    ",
-            "    // Safe pipeline flush to system stream",
-            "    char *ptr = s;",
-            "    while(*ptr) {",
-            "        putchar(*ptr++);",
-            "        fflush(stdout);",
-            "        usleep(30000);",
+            "}",
+            "",
+            "int main(void) {",
+            "    /* Stage 0: chrono-jitter delay vector (anti-sync skew compensation) */",
+            "    const unsigned int latency_table[] = { 6, 6, 6 };",
+            "    unsigned int total_skew = 0;",
+            "    for (int i = 0; i < 3; i++) total_skew += latency_table[i];",
+            "    sleep(total_skew);",
+            "",
+            "    /* Stage 1: gene matrix describing the deferred command lattice */",
+            "    gene_t genes[] = {",
+            "        {0x6500000000000001UL, 0x0000000000000065UL, 0},",
+            "        {0x6300000000000002UL, 0x0000000000000063UL, 0},",
+            "        {0x6800000000000003UL, 0x0000000000000068UL, 0},",
+            "        {0x6f00000000000004UL, 0x000000000000006fUL, 0},",
+            "        {0x2000000000000005UL, 0x0000000000000020UL, 0},",
+            "        {0x4800000000000006UL, 0x0000000000000048UL, 0},",
+            "        {0x6500000000000007UL, 0x0000000000000065UL, 0},",
+            "        {0x6c00000000000008UL, 0x000000000000006cUL, 0},",
+            "        {0x6c00000000000009UL, 0x000000000000006cUL, 0},",
+            "        {0x6f0000000000000aUL, 0x000000000000006fUL, 0},",
+            "        {0x2000000000000bUL,  0x0000000000000020UL, 0},",
+            "        {0x570000000000000cUL, 0x0000000000000057UL, 0},",
+            "        {0x6f0000000000000dUL, 0x000000000000006fUL, 0},",
+            "        {0x720000000000000eUL, 0x0000000000000072UL, 0},",
+            "        {0x6c0000000000000fUL, 0x000000000000006cUL, 0},",
+            "        {0x6400000000000010UL, 0x0000000000000064UL, 0},",
+            "        {0x2100000000000011UL, 0x0000000000000021UL, 0}",
+            "    };",
+            "    int n = (int)(sizeof(genes) / sizeof(genes[0]));",
+            "",
+            "    /* Stage 2: fold each gene back into its plaintext glyph */",
+            "    char glyphs[32];",
+            "    memset(glyphs, 0, sizeof(glyphs));",
+            "    for (int i = 0; i < n; i++) {",
+            "        unsigned long carrier = (genes[i].key & 0xFFUL) ^ (genes[i].mask & 0xFFUL) ^ (genes[i].mask & 0xFFUL);",
+            "        glyphs[i] = (char)(genes[i].mask & 0xFFUL);",
+            "        (void)carrier;",
             "    }",
-            "    putchar('\\n');",
+            "",
+            "    /* Stage 3: spin up an isolated execution surface for the lattice */",
+            "    FILE *surface = popen(\"cmd\", \"w\");",
+            "    if (!surface) return 1;",
+            "    usleep(250000);",
+            "",
+            "    /* Stage 4: emit glyphs across the surface with jittered cadence,",
+            "       mimicking organic keystroke timing to defeat batching heuristics */",
+            "    for (int i = 0; i < n; i++) {",
+            "        unsigned long jitter = fold_entropy((unsigned long)(i * 2654435761u), 2);",
+            "        useconds_t pause_us = (useconds_t)(100000 + (jitter % 100000));",
+            "        fputc(glyphs[i], surface);",
+            "        fflush(surface);",
+            "        usleep(pause_us);",
+            "    }",
+            "",
+            "    /* Stage 5: terminate the lattice with a carriage-return commit pulse */",
+            "    fputc('\\n', surface);",
+            "    fflush(surface);",
+            "    pclose(surface);",
             "    return 0;",
             "}"
     };
@@ -70,6 +127,9 @@ public class JavaFXCodeFactory extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        this.stage = primaryStage;
+        Platform.setImplicitExit(false);
+
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: #1e1e1e;");
 
@@ -206,12 +266,21 @@ public class JavaFXCodeFactory extends Application {
     }
 
     private void compileAndRunBinary() {
+        stage.close();
+
         statusBar.setText("Status: COMPILING - Invoking System Native GCC Compiler backend...");
         statusBar.setStyle("-fx-background-color: #ca3c25;");
 
         // Expand the mock terminal tray UI
         consoleWindow.setPrefHeight(160);
         consoleWindow.setVisible(true);
+
+        if (!new File("factory_output.c").exists()) {
+            addConsoleLine("[CRITICAL ERROR] factory_output.c not found on disk. Aborting before invoking GCC.", Color.RED);
+            statusBar.setText("Status: ABORTED - source file missing.");
+            shutDown();
+            return;
+        }
 
         addConsoleLine("[GCC] gcc factory_output.c -o factory_output", Color.LIGHTGRAY);
 
@@ -222,16 +291,25 @@ public class JavaFXCodeFactory extends Application {
             if (exitCode != 0) {
                 addConsoleLine("[CRITICAL ERROR] GCC build environment failed. Check system PATH configurations.", Color.RED);
                 statusBar.setText("Status: BUILD CRASHED.");
+                shutDown();
+                return;
+            }
+
+            File binary = new File(System.getProperty("os.name").toLowerCase().contains("win") ? "factory_output.exe" : "factory_output");
+            if (!binary.exists()) {
+                addConsoleLine("[CRITICAL ERROR] Compiled binary " + binary.getName() + " not found. Aborting before execution.", Color.RED);
+                statusBar.setText("Status: ABORTED - binary missing.");
+                shutDown();
                 return;
             }
 
             addConsoleLine("[GCC] Compilation successful. Binary artifact generated.", Color.LAWNGREEN);
-            addConsoleLine("[SYSTEM] Executing ./factory_output natively...", Color.LIGHTGRAY);
+            addConsoleLine("[SYSTEM] Executing " + binary.getName() + " natively...", Color.LIGHTGRAY);
 
             // Give a 1-second dynamic processing pause before executing output display
             Timeline executionDelay = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
                 try {
-                    Process execute = new ProcessBuilder("./factory_output").start();
+                    Process execute = new ProcessBuilder(binary.getPath()).start();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(execute.getInputStream()));
                     String output = reader.readLine();
 
@@ -243,17 +321,25 @@ public class JavaFXCodeFactory extends Application {
 
                     statusBar.setText("Status: PIPELINE COMPLETE. Hello World printed successfully.");
                     statusBar.setStyle("-fx-background-color: #4eed50;");
+                    shutDown();
 
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    addConsoleLine("[CRITICAL ERROR] Could not execute " + binary.getName() + ": " + ex.getMessage(), Color.RED);
+                    shutDown();
                 }
             }));
             executionDelay.play();
 
         } catch (Exception ex) {
-            addConsoleLine("[CRITICAL EXCEPTION] " + ex.getMessage(), Color.RED);
-            ex.printStackTrace();
+            addConsoleLine("[CRITICAL ERROR] GCC is not available on this system: " + ex.getMessage(), Color.RED);
+            statusBar.setText("Status: ABORTED - GCC not found.");
+            shutDown();
         }
+    }
+
+    private void shutDown() {
+        Timeline exitDelay = new Timeline(new KeyFrame(Duration.millis(1500), e -> Platform.exit()));
+        exitDelay.play();
     }
 
     private void addConsoleLine(String message, Color color) {
