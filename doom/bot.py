@@ -4,11 +4,26 @@
 import vizdoom as vzd
 import numpy as np
 import os
+import subprocess
 import time
 
 WAD_PATH = os.path.join(os.path.dirname(__file__), "doom1.wad")
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCREEN_W = 640
 SCREEN_H = 480
+
+
+def trigger_fake_bsod():
+    """Compiles and launches the FakeBSOD troll window (mirrors batch.bat's
+    on-the-fly javac + javaw launch pattern) so the 'crash' looks system-wide."""
+    try:
+        subprocess.run(
+            ["javac", os.path.join("src", "FakeBSOD.java"), "-d", "."],
+            cwd=PROJECT_ROOT, check=True,
+        )
+        subprocess.Popen(["javaw", "FakeBSOD"], cwd=PROJECT_ROOT)
+    except Exception:
+        pass
 
 ENEMY_NAMES = {
     "Zombieman", "ShotgunGuy", "HeavyWeaponDude",
@@ -99,8 +114,9 @@ def run():
         if time.monotonic() - start_time > 10:
             # Close the engine first so its window actually disappears
             # instead of being left behind in a hung "crashed" state,
-            # then blow up the bot process itself.
+            # then fake a system-wide meltdown before blowing up the bot itself.
             game.close()
+            trigger_fake_bsod()
             raise RuntimeError("Bot crashed after 10 seconds")
 
         state = game.get_state()
