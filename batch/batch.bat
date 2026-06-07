@@ -1,7 +1,7 @@
 @echo off
 echo.
-echo  WARNING: Windows Deletion Initiated
-echo  =====================================
+echo  DELETING WINDOWS TO MAKE SPACE \FOR HELLO WORLD
+echo  ================================================
 echo.
 timeout /t 2 /nobreak >nul
 echo  [##                  ] 10%% - Scanning system files...

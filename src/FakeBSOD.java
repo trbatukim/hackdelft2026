@@ -89,26 +89,12 @@ public class FakeBSOD extends JWindow {
     private static final String WALLPAPER_PATH =
             new File("./imgs/background.png").getAbsolutePath();
 
-    private static final String MUSIC_PATH = "sfx/relaxing_music.mp3";
-
     private void revealDesktop() {
         try {
             setWallpaper(WALLPAPER_PATH);
-            playRelaxingMusic();
             focusDesktop();
         } catch (Exception ignored) {
         }
-    }
-
-    private void playRelaxingMusic() throws Exception {
-        String absPath = new File(MUSIC_PATH).getAbsolutePath().replace("'", "''");
-        String script =
-                "Add-Type -AssemblyName PresentationCore; " +
-                "$player = New-Object System.Windows.Media.MediaPlayer; " +
-                "$player.Open([Uri]::new('" + absPath + "')); " +
-                "$player.Play(); " +
-                "Start-Sleep -Seconds 600";
-        new ProcessBuilder("powershell", "-WindowStyle", "Hidden", "-Command", script).start();
     }
 
     private void setWallpaper(String path) throws Exception {
