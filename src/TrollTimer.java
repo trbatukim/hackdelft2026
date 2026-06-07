@@ -55,7 +55,7 @@ public class TrollTimer extends JFrame {
 
     private void initAlarmClip() {
         try {
-            File alarmFile = new File("alarm.wav");
+            File alarmFile = new File("./sfx/alarm.wav");
             if (!alarmFile.exists()) return;
 
             AudioInputStream rawStream = AudioSystem.getAudioInputStream(alarmFile);
@@ -171,7 +171,7 @@ public class TrollTimer extends JFrame {
     private void triggerVineBoom() throws InterruptedException {
         new Thread(() -> {
             try {
-                File soundFile = new File("vine-boom.wav");
+                File soundFile = new File("./sfx/vine-boom.wav");
 
                 if (soundFile.exists()) {
                     AudioInputStream rawStream = AudioSystem.getAudioInputStream(soundFile);

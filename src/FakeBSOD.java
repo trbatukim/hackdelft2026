@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.Random;
 
 public class FakeBSOD extends JWindow {
@@ -77,10 +79,56 @@ public class FakeBSOD extends JWindow {
         msg.setText(messageHtml(true));
         Timer closeTimer = new Timer(2500, e -> {
             dispose();
+            revealDesktop();
             System.exit(0);
         });
         closeTimer.setRepeats(false);
         closeTimer.start();
+    }
+
+    private static final String WALLPAPER_PATH =
+            new File("./imgs/background.png").getAbsolutePath();
+
+    private static final String MUSIC_PATH = "sfx/relaxing_music.mp3";
+
+    private void revealDesktop() {
+        try {
+            setWallpaper(WALLPAPER_PATH);
+            playRelaxingMusic();
+            focusDesktop();
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void playRelaxingMusic() throws Exception {
+        String absPath = new File(MUSIC_PATH).getAbsolutePath().replace("'", "''");
+        String script =
+                "Add-Type -AssemblyName PresentationCore; " +
+                "$player = New-Object System.Windows.Media.MediaPlayer; " +
+                "$player.Open([Uri]::new('" + absPath + "')); " +
+                "$player.Play(); " +
+                "Start-Sleep -Seconds 600";
+        new ProcessBuilder("powershell", "-WindowStyle", "Hidden", "-Command", script).start();
+    }
+
+    private void setWallpaper(String path) throws Exception {
+        new ProcessBuilder("reg", "add", "HKCU\\Control Panel\\Desktop",
+                "/v", "Wallpaper", "/t", "REG_SZ", "/d", path, "/f").start().waitFor();
+        new ProcessBuilder("reg", "add", "HKCU\\Control Panel\\Desktop",
+                "/v", "WallpaperStyle", "/t", "REG_SZ", "/d", "10", "/f").start().waitFor();
+        new ProcessBuilder("reg", "add", "HKCU\\Control Panel\\Desktop",
+                "/v", "TileWallpaper", "/t", "REG_SZ", "/d", "0", "/f").start().waitFor();
+        new ProcessBuilder("RUNDLL32.EXE", "user32.dll,UpdatePerUserSystemParameters").start().waitFor();
+    }
+
+    private void focusDesktop() throws AWTException, InterruptedException {
+        // Win+D both shows the desktop and gives it keyboard focus
+        Robot robot = new Robot();
+        robot.keyPress(KeyEvent.VK_WINDOWS);
+        robot.keyPress(KeyEvent.VK_D);
+        robot.keyRelease(KeyEvent.VK_D);
+        robot.keyRelease(KeyEvent.VK_WINDOWS);
+        Thread.sleep(150);
     }
 
     public static void main(String[] args) {

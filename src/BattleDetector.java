@@ -74,7 +74,7 @@ public class BattleDetector {
                 System.out.println("╚══════════════════════════════════════╝");
                 SwingUtilities.invokeLater(() -> {
                     JOptionPane pane = new JOptionPane(
-                        "The Pokémon battle has been won!\nVictory jingle is now playing...",
+                        "Congratulations! However, we want to ensure you are not a bot.",
                         JOptionPane.INFORMATION_MESSAGE
                     );
                     JDialog dialog = pane.createDialog(null, "VICTORY AUDIO DETECTED! Redirecting to captcha...");
