@@ -23,7 +23,7 @@ public class Logic {
         // Showing a native dialog resets the Windows focus restrictions.
         // Once the user clicks "OK", the OS treats the next execution command as a primary user action.
         JOptionPane.showMessageDialog(null,
-                "Verification Complete!\nClick OK to print 'Hello World!'.",
+                "Verification Complete!\nWin this Pokemon battle to prove you are a human",
                 "System Redirect",
                 JOptionPane.INFORMATION_MESSAGE);
 
