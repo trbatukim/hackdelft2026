@@ -44,6 +44,20 @@ sfx/                  alarm, vine boom, and some relaxing music
 lib/                  JavaFX 23 and ZXing jars
 ```
 
+## Code Distribution
+
+<img width="305" height="142" alt="image" src="https://github.com/user-attachments/assets/347d8245-64c6-45f8-8d1e-79846fd7521b" />
+
+We wanted to use as many different languages as possible in spirit of a Rube Goldberg machine. The code distribution is like this:
+
+- **58% Java:** Used for event listeners, JavaFX desktop windows, fake BSOD, QR reader, and in between logic.
+- **12.7% JavaScript:** Used for web apps and bots for Pokémon battle, and fake captcha.
+- **10.1% CSS:** Used to style web apps for Pokémon battle, and fake captcha.
+- **7.1% Python:** Used to code a DOOM bot using VIZDoom.
+- **4.9% HTML:** Used for Pokémon battle, and fake captcha skeletons.
+- **4% C:** Went unused in the final project.
+- **3.2% Batchfile:** Used to run a fake deleting Windows script and for the final `echo Hello World!` command.
+
 ## Running It
 
 You will need a JDK, and Python with ViZDoom and NumPy. The JavaFX and ZXing jars live in `lib/`.
